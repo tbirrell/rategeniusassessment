@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace HighScores;
 
@@ -13,12 +15,12 @@ class HighScoresList implements Countable
     /**
      * @var array
      */
-    protected $list;
-
+    protected $list = [];
+    
     /**
      * HighScoresList constructor.
      *
-     * @param array $scores
+     * @param  array  $scores
      */
     public function __construct(array $scores = [])
     {
@@ -26,24 +28,25 @@ class HighScoresList implements Countable
             $this->add($score);
         }
     }
-
+    
     /**
      * Adds a score to the HighScoresList.
      *
-     * @param array $score
+     * @param  array  $score
      *
      * @return void
      */
     public function add($score): void
     {
-        // TODO
+        $score = !is_array($score) ? [$score] : $score;
+        $this->list = array_merge($this->list, $score);
     }
-
+    
     public function count()
     {
         return count($this->list);
     }
-
+    
     /**
      * Returns the highest score.
      *
@@ -51,11 +54,11 @@ class HighScoresList implements Countable
      */
     public function highestScore(): int
     {
-        // TODO
-
-        return 0;
+        $sorted = $this->list;
+        rsort($sorted);
+        return $sorted[0];
     }
-
+    
     /**
      * Returns the most recently added score.
      *
@@ -63,11 +66,9 @@ class HighScoresList implements Countable
      */
     public function lastAdded(): int
     {
-        // TODO
-
-        return 0;
+        return end($this->list);
     }
-
+    
     /**
      * Returns an array containing the top three scores, beginning with the highest.
      *
@@ -75,11 +76,11 @@ class HighScoresList implements Countable
      */
     public function topThree(): array
     {
-        // TODO
-
-        return [];
+        $sorted = $this->list;
+        rsort($sorted);
+        return [$sorted[0], $sorted[1], $sorted[2]];
     }
-
+    
     /**
      * Returns an array containing the top five scores, beginning with the highest.
      *
@@ -87,8 +88,8 @@ class HighScoresList implements Countable
      */
     public function topFive(): array
     {
-        // TODO
-
-        return [];
+        $sorted = $this->list;
+        rsort($sorted);
+        return [$sorted[0], $sorted[1], $sorted[2], $sorted[3], $sorted[4]];
     }
 }

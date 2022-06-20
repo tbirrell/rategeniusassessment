@@ -7,7 +7,14 @@
 
       <v-data-table
         data-test-id="the-data-table"
+        :headers="headers"
+        :items="allLoanApplications"
+        :sort-by="sortBy"
+        sort-desc
       >
+        <template v-slot:item.updatedAt="{ item }">{{ formatRelativeDate(item.updatedAt) }}</template>
+        <template v-slot:item.lastNoteByCurrentUser="{ item }">{{ formatRelativeDate(item.lastNoteByCurrentUser) }}</template>
+        <template v-slot:item.timeInStatus="{ item }">{{ formatRelativeDate(item.timeInStatus) }}</template>
       </v-data-table>
     </v-col>
   </v-row>
@@ -15,10 +22,22 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { DateTime } from 'luxon';
 
 export default {
   data: () => ({
-    // declare initial data here
+    headers: [
+      { text: 'App Id', value: 'id' },
+      { text: 'Last Name', value: 'lastName' },
+      { text: 'First Name', value: 'firstName' },
+      { text: 'State', value: 'state' },
+      { text: 'Status', value: 'status' },
+      { text: 'My Last Note', value: 'lastNoteByCurrentUser' },
+      { text: 'Time In Status', value: 'timeInStatus' },
+      { text: 'Task', value: 'oldestOpenTask' },
+      { text: 'Last Updated', value: 'updatedAt' }
+    ],
+    sortBy: 'lastNoteByCurrentUser'
   }),
 
   computed: {
@@ -30,7 +49,10 @@ export default {
   methods: {
     ...mapActions({
       loadLoanApplications: 'loadLoanApplications'
-    })
+    }),
+    formatRelativeDate (date) {
+      return DateTime.fromISO(date).toRelative();
+    }
   }
 };
 </script>
